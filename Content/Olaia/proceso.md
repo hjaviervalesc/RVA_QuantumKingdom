@@ -281,3 +281,105 @@ El sistema permite:
 - Recepción de daño controlada
 - Invulnerabilidad temporal tras recibir daño
 - Pruebas de combate mediante una esfera en el nivel
+
+
+# PASO 4: Game Over al llegar a 0 vidas
+
+## Objetivo
+
+Hacer que el juego termine cuando el jugador llegue a 0 vidas, integrándolo dentro del sistema de daño ya creado.
+
+---
+
+## Cambios realizados
+
+### 1. Modificación del sistema de daño
+
+Dentro de la función:
+
+```
+TakeDamage
+```
+
+tras restar 1 vida al jugador:
+
+```
+CurrentLives = CurrentLives - 1
+```
+
+se añade una comprobación de fin de partida.
+
+---
+
+## 2. Comprobación de vidas
+
+Se añade una condición:
+
+```
+CurrentLives <= 0
+```
+
+---
+
+### Resultado de la condición:
+
+#### ✔ TRUE (0 o menos vidas)
+
+Se ejecuta Game Over.
+
+Opciones actuales:
+
+- Reiniciar el nivel con:
+```
+Open Level (Current Level)
+```
+
+o
+
+- Finalizar el juego con:
+```
+Quit Game
+```
+
+---
+
+#### ✖ FALSE (aún hay vidas)
+
+El juego continúa normalmente sin cambios.
+
+---
+
+## Estado actual
+
+El sistema completo de vida ahora incluye:
+
+- Reducción de vida al recibir daño
+- Invulnerabilidad temporal de 3 segundos
+- Bloqueo de daño durante invulnerabilidad
+- Final de partida al llegar a 0 vidas
+
+---
+
+## Flujo general
+
+```
+TakeDamage
+   ↓
+¿bIsInvulnerable?
+   ├── TRUE → No hacer nada
+   └── FALSE:
+           ↓
+      CurrentLives - 1
+           ↓
+      ¿CurrentLives <= 0?
+           ├── TRUE → Game Over
+           └── FALSE → Continuar juego
+```
+
+---
+
+## Trabajo pendiente
+
+- Añadir pantalla de Game Over en VR
+- Añadir efectos visuales/sonoros al morir
+- Añadir menú de reinicio en VR
