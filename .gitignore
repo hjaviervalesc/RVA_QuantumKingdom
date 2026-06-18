@@ -50,10 +50,6 @@ SourceArt/**/*.tga
 Binaries/*
 Plugins/**/Binaries/*
 
-# Ignore Plugins folder (root-level) and all its contents/subfolders
-/Plugins/
-/Plugins/**
-
 # Builds
 Build/*
 
@@ -74,9 +70,7 @@ Saved/*
 # Compiled source files for the engine to use
 Intermediate/*
 Plugins/**/Intermediate/*
+Plugins/
 
 # Cache files for the editor to use
 DerivedDataCache/*
-
-# Ignore IDE project settings in repo root
-/.idea/
