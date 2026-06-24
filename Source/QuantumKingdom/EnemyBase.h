@@ -20,15 +20,23 @@ public:
 
 	//Distancia ataque
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
-	float MeleeRange = 250.0f;
+	float MeleeRange = 100.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	float AttackCooldown = 1.0f;
 	float LastAttackTime = 0.0f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	UAnimMontage* AttackMontage;
+
+	bool bIsAttacking = false;
+
+
 
 
 
 	void PerformMeleeAttack();
+	void DoDamageRaycast();
+
 
 };

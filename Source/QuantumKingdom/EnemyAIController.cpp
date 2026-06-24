@@ -24,7 +24,7 @@ void AEnemyAIController::Tick(float DeltaSeconds)
         UE_LOG(LogTemp, Warning, TEXT("DISTANCIA: %f"), Distance);
 
 
-        if (Distance < 200.0f)// rango de ataque
+        if (Distance < 250.0f)// rango de ataque
         {
             AEnemyBase* Enemy = Cast<AEnemyBase>(GetPawn());
             if (Enemy)

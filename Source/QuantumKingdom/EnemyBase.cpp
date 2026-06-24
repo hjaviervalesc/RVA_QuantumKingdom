@@ -13,49 +13,76 @@ AEnemyBase::AEnemyBase()
 }
 void AEnemyBase::PerformMeleeAttack()
 {
-    // Cooldown del ataque
+    // Cooldown
     float CurrentTime = GetWorld()->GetTimeSeconds();
-    if (CurrentTime - LastAttackTime < AttackCooldown)
+    if (CurrentTime - LastAttackTime < AttackCooldown || bIsAttacking)
+        return;
+
+    LastAttackTime = CurrentTime;
+    bIsAttacking = true;
+
+    // Reproducir animación
+    if (AttackMontage)
     {
-        return; // demasiado pronto para atacar otra vez
+        PlayAnimMontage(AttackMontage);
     }
 
-    // Actualizamos el tiempo del último ataque
-    LastAttackTime = CurrentTime;
+    // Lanzar el ataque real después de un pequeño delay
+    // (para sincronizar con el golpe de la animación)
+    FTimerHandle TimerHandle;
+    GetWorld()->GetTimerManager().SetTimer(
+        TimerHandle,
+        this,
+        &AEnemyBase::DoDamageRaycast,
+        0.92f,   // tiempo hasta el impacto (ajústalo según la animación)
+        false
+    );
 
-    //Obtengo al jugador
+    // Resetear estado de ataque al terminar la animación
+    FTimerHandle ResetHandle;
+    GetWorld()->GetTimerManager().SetTimer(
+        ResetHandle,
+        [this]()
+        {
+            bIsAttacking = false;
+        },
+        2.4f,   // duración de la animación
+        false
+    );
+}
+
+void AEnemyBase::DoDamageRaycast()
+{
+    
+    DrawDebugSphere(GetWorld(), GetActorLocation(), 20, 12, FColor::Blue, false, 0.1f);
     APawn* Player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
     if (!Player) return;
 
-    // 2. Calcular desde dónde y hacia dónde golpeamos
-    FVector Start = GetActorLocation();
+    FVector Start = GetActorLocation() + FVector(0, 0, 80);
     FVector Forward = GetActorForwardVector();
     FVector End = Start + Forward * MeleeRange;
 
-    // 3. Preparar el raycast
     FHitResult Hit;
     FCollisionQueryParams Params;
     Params.AddIgnoredActor(this);
 
-    // 4. Lanzar el rayo
     bool bHit = GetWorld()->LineTraceSingleByChannel(
         Hit,
         Start,
         End,
-        ECC_Pawn,
+        ECC_Visibility,
         Params
     );
 
-    // Debug para ver el rayo
     DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 0.2f, 0, 2.0f);
 
-    // 5. Si golpeamos algo → aplicar daño
     if (bHit && Hit.GetActor())
     {
         UE_LOG(LogTemp, Warning, TEXT("HIT: %s"), *Hit.GetActor()->GetName());
+
         UGameplayStatics::ApplyDamage(
             Hit.GetActor(),
-            MeleeDamage,      // 1 corazón
+            MeleeDamage,
             GetController(),
             this,
             nullptr
