@@ -3,6 +3,8 @@
 
 #include "EnemyAIController.h"
 #include "Kismet/GameplayStatics.h"
+#include "EnemyBase.h"
+
 
 void AEnemyAIController::BeginPlay()
 {
@@ -16,8 +18,19 @@ void AEnemyAIController::Tick(float DeltaSeconds)
     APawn* Player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
     if (Player)
     {
-        MoveToActor(Player, 5.0f);
+        MoveToActor(Player, 100.0f); // distancia de persecución
+
+        float Distance = FVector::Dist(GetPawn()->GetActorLocation(), Player->GetActorLocation());
+        UE_LOG(LogTemp, Warning, TEXT("DISTANCIA: %f"), Distance);
+
+
+        if (Distance < 200.0f)// rango de ataque
+        {
+            AEnemyBase* Enemy = Cast<AEnemyBase>(GetPawn());
+            if (Enemy)
+            {
+                Enemy->PerformMeleeAttack();
+            }
+        }
     }
 }
-
-

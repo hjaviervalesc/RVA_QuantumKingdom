@@ -16,6 +16,7 @@ class QUANTUMKINGDOM_API AEnemyAIController : public AAIController
 public:
     virtual void Tick(float DeltaSeconds) override;
 
+
 protected:
     virtual void BeginPlay() override;
 	

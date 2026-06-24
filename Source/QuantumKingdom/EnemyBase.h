@@ -15,4 +15,20 @@ public:
 	// Sets default values for this character's properties
 	AEnemyBase();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	int32 MeleeDamage = 1;
+
+	//Distancia ataque
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	float MeleeRange = 250.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	float AttackCooldown = 1.0f;
+	float LastAttackTime = 0.0f;
+
+
+
+
+	void PerformMeleeAttack();
+
 };
