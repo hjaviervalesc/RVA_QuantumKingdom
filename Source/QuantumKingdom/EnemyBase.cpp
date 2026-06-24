@@ -1,0 +1,15 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#include "EnemyBase.h"
+#include "EnemyAIController.h"
+
+AEnemyBase::AEnemyBase()
+{
+    PrimaryActorTick.bCanEverTick = true;
+
+    AIControllerClass = AEnemyAIController::StaticClass();
+    AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+}
+
+
+

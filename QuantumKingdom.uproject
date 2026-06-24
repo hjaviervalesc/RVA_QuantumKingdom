@@ -3,6 +3,17 @@
 	"EngineAssociation": "5.5",
 	"Category": "",
 	"Description": "",
+	"Modules": [
+		{
+			"Name": "QuantumKingdom",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine",
+				"AIModule"
+			]
+		}
+	],
 	"Plugins": [
 		{
 			"Name": "OpenXR",
@@ -34,7 +45,24 @@
 		{
 			"Name": "OculusPlatform",
 			"Enabled": true,
-			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/7ce814580ba341b4bb5865983fea9d31",
+			"SupportedTargetPlatforms": [
+				"Win64",
+				"Android"
+			],
+			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/7ce814580ba341b4bb5865983fea9d31"
+		},
+		{
+			"Name": "VisualStudioTools",
+			"Enabled": true,
+			"SupportedTargetPlatforms": [
+				"Win64"
+			],
+			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/362651520df94e4fa65492dbcba44ae2"
+		},
+		{
+			"Name": "OculusXR",
+			"Enabled": true,
+			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/8313d8d7e7cf4e03a33e79eb757bccba",
 			"SupportedTargetPlatforms": [
 				"Win64",
 				"Android"
