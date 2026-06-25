@@ -11,84 +11,125 @@ AEnemyBase::AEnemyBase()
     AIControllerClass = AEnemyAIController::StaticClass();
     AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 }
+
 void AEnemyBase::PerformMeleeAttack()
 {
-    // Cooldown
     float CurrentTime = GetWorld()->GetTimeSeconds();
+
     if (CurrentTime - LastAttackTime < AttackCooldown || bIsAttacking)
         return;
 
     LastAttackTime = CurrentTime;
     bIsAttacking = true;
 
-    // Reproducir animación
     if (AttackMontage)
     {
         PlayAnimMontage(AttackMontage);
     }
 
-    // Lanzar el ataque real después de un pequeño delay
-    // (para sincronizar con el golpe de la animación)
-    FTimerHandle TimerHandle;
-    GetWorld()->GetTimerManager().SetTimer(
-        TimerHandle,
-        this,
-        &AEnemyBase::DoDamageRaycast,
-        0.92f,   // tiempo hasta el impacto (ajústalo según la animación)
-        false
-    );
+    // ACTIVAR DAÑO
+    EnableWeaponDamage();
 
-    // Resetear estado de ataque al terminar la animación
     FTimerHandle ResetHandle;
     GetWorld()->GetTimerManager().SetTimer(
         ResetHandle,
         [this]()
         {
             bIsAttacking = false;
+
+            // DESACTIVAR DAÑO
+            DisableWeaponDamage();
         },
-        2.4f,   // duración de la animación
+        2.2f,
         false
     );
 }
 
-void AEnemyBase::DoDamageRaycast()
-{
-    
-    DrawDebugSphere(GetWorld(), GetActorLocation(), 20, 12, FColor::Blue, false, 0.1f);
-    APawn* Player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-    if (!Player) return;
-
-    FVector Start = GetActorLocation() + FVector(0, 0, 80);
-    FVector Forward = GetActorForwardVector();
-    FVector End = Start + Forward * MeleeRange;
-
-    FHitResult Hit;
-    FCollisionQueryParams Params;
-    Params.AddIgnoredActor(this);
-
-    bool bHit = GetWorld()->LineTraceSingleByChannel(
-        Hit,
-        Start,
-        End,
-        ECC_Visibility,
-        Params
-    );
-
-    DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 0.2f, 0, 2.0f);
-
-    if (bHit && Hit.GetActor())
-    {
-        UE_LOG(LogTemp, Warning, TEXT("HIT: %s"), *Hit.GetActor()->GetName());
-
-        UGameplayStatics::ApplyDamage(
-            Hit.GetActor(),
-            MeleeDamage,
-            GetController(),
-            this,
-            nullptr
-        );
-    }
-}
-
-
+//AEnemyBase::AEnemyBase()
+//{
+//    PrimaryActorTick.bCanEverTick = true;
+//
+//    AIControllerClass = AEnemyAIController::StaticClass();
+//    AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+//}
+//void AEnemyBase::PerformMeleeAttack()
+//{
+//    // Cooldown
+//    float CurrentTime = GetWorld()->GetTimeSeconds();
+//    if (CurrentTime - LastAttackTime < AttackCooldown || bIsAttacking)
+//        return;
+//
+//    LastAttackTime = CurrentTime;
+//    bIsAttacking = true;
+//
+//    // Reproducir animación
+//    if (AttackMontage)
+//    {
+//        PlayAnimMontage(AttackMontage);
+//    }
+//
+//    // Lanzar el ataque real después de un pequeño delay
+//    // (para sincronizar con el golpe de la animación)
+//    FTimerHandle TimerHandle;
+//    GetWorld()->GetTimerManager().SetTimer(
+//        TimerHandle,
+//        this,
+//        &AEnemyBase::DoDamageRaycast,
+//        0.92f,   // tiempo hasta el impacto (ajústalo según la animación)
+//        false
+//    );
+//
+//    // Resetear estado de ataque al terminar la animación
+//    FTimerHandle ResetHandle;
+//    GetWorld()->GetTimerManager().SetTimer(
+//        ResetHandle,
+//        [this]()
+//        {
+//            bIsAttacking = false;
+//        },
+//        2.4f,   // duración de la animación
+//        false
+//    );
+//}
+//
+////void AEnemyBase::DoDamageRaycast()
+////{
+////    
+////    DrawDebugSphere(GetWorld(), GetActorLocation(), 20, 12, FColor::Blue, false, 0.1f);
+////    APawn* Player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+////    if (!Player) return;
+////
+////    FVector Start = GetActorLocation() + FVector(0, 0, 80);
+////    FVector Forward = GetActorForwardVector();
+////    FVector End = Start + Forward * MeleeRange;
+////
+////    FHitResult Hit;
+////    FCollisionQueryParams Params;
+////    Params.AddIgnoredActor(this);
+////
+////    bool bHit = GetWorld()->LineTraceSingleByChannel(
+////        Hit,
+////        Start,
+////        End,
+////        ECC_Visibility,
+////        Params
+////    );
+////
+////    DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 0.2f, 0, 2.0f);
+////
+////    if (bHit && Hit.GetActor())
+////    {
+////        UE_LOG(LogTemp, Warning, TEXT("HIT: %s"), *Hit.GetActor()->GetName());
+////
+////        UGameplayStatics::ApplyDamage(
+////            Hit.GetActor(),
+////            MeleeDamage,
+////            GetController(),
+////            this,
+////            nullptr
+////        );
+////    }
+////}
+//
+//
 

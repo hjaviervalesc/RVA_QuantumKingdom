@@ -19,8 +19,8 @@ public:
 	int32 MeleeDamage = 1;
 
 	//Distancia ataque
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
-	float MeleeRange = 100.0f;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	//float MeleeRange = 250.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	float AttackCooldown = 1.0f;
@@ -32,11 +32,17 @@ public:
 	bool bIsAttacking = false;
 
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void EnableWeaponDamage();
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void DisableWeaponDamage();
 
-
+	//void StartAttack();
 	void PerformMeleeAttack();
-	void DoDamageRaycast();
+	/*void DoDamageRaycast();*/
+
+
 
 
 };
