@@ -42,6 +42,15 @@ public:
 	void PerformMeleeAttack();
 	/*void DoDamageRaycast();*/
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
+	class UAudioComponent* FootstepsAudio;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
+	class UAudioComponent* AttackAudio;
+
+	void PlayFootsteps();
+	void StopFootsteps();
+
 
 
 

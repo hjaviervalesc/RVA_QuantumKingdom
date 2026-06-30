@@ -3,6 +3,7 @@
 #include "EnemyBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "EnemyAIController.h"
+#include "Components/AudioComponent.h"
 
 AEnemyBase::AEnemyBase()
 {
@@ -10,6 +11,29 @@ AEnemyBase::AEnemyBase()
 
     AIControllerClass = AEnemyAIController::StaticClass();
     AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+    // --- AUDIO ---
+    FootstepsAudio = CreateDefaultSubobject<UAudioComponent>(TEXT("FootstepsAudio"));
+    FootstepsAudio->SetupAttachment(RootComponent);
+    FootstepsAudio->bAutoActivate = false;
+
+    AttackAudio = CreateDefaultSubobject<UAudioComponent>(TEXT("AttackAudio"));
+    AttackAudio->SetupAttachment(RootComponent);
+    AttackAudio->bAutoActivate = false;
+}
+void AEnemyBase::PlayFootsteps()
+{
+    if (FootstepsAudio && !FootstepsAudio->IsPlaying())
+    {
+        FootstepsAudio->Play();
+    }
+}
+
+void AEnemyBase::StopFootsteps()
+{
+    if (FootstepsAudio && FootstepsAudio->IsPlaying())
+    {
+        FootstepsAudio->Stop();
+    }
 }
 
 void AEnemyBase::PerformMeleeAttack()
@@ -132,4 +156,3 @@ void AEnemyBase::PerformMeleeAttack()
 ////}
 //
 //
-
