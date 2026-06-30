@@ -50,7 +50,10 @@ void AEnemyBase::PerformMeleeAttack()
     {
         PlayAnimMontage(AttackMontage);
     }
-
+    if (AttackAudio)
+    {
+        AttackAudio->Play();
+    }
     // ACTIVAR DAÑO
     EnableWeaponDamage();
 
